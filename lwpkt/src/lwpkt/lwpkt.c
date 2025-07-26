@@ -90,7 +90,7 @@
 #define SEND_EVT(pkt, event)                                                                                           \
     do {                                                                                                               \
         if ((pkt)->evt_fn != NULL) {                                                                                   \
-            (pkt)->evt_fn((pkt), (event));                                                                             \
+            (pkt)->evt_fn((pkt), (event), (pkt)->usr_ptr);                                                                             \
         }                                                                                                              \
     } while (0)
 #else /* LWPKT_CFG_USE_EVT */
@@ -780,8 +780,9 @@ lwpkt_reset(lwpkt_t* pkt) {
  * \return          \ref lwpktOK on success, member of \ref lwpktr_t otherwise
  */
 lwpktr_t
-lwpkt_set_evt_fn(lwpkt_t* pkt, lwpkt_evt_fn evt_fn) {
+lwpkt_set_evt_fn(lwpkt_t* pkt, lwpkt_evt_fn evt_fn, void *usr_ptr) {
     pkt->evt_fn = evt_fn;
+		pkt->usr_ptr = usr_ptr;
 
     return lwpktOK;
 }

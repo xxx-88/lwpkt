@@ -117,8 +117,9 @@ typedef enum {
  * \brief           Event function prototype
  * \param[in]       pkt: Packet structure
  * \param[in]       evt_type: Event type
+ * \param[in]       usr_ptr: User pointer
  */
-typedef void (*lwpkt_evt_fn)(struct lwpkt* pkt, lwpkt_evt_type_t evt_type);
+typedef void (*lwpkt_evt_fn)(struct lwpkt* pkt, lwpkt_evt_type_t evt_type, void *usr_ptr);
 
 /**
  * \brief           Device address data type
@@ -142,6 +143,7 @@ typedef struct lwpkt {
     uint32_t last_rx_time;                /*!< Last RX time in units of milliseconds */
 #if LWPKT_CFG_USE_EVT || __DOXYGEN__
     lwpkt_evt_fn evt_fn; /*!< Global event function for read and write operation */
+		void *usr_ptr; /*!< user pointer to be given into event calls */
 #endif                   /* LWPKT_CFG_USE_EVT || __DOXYGEN__ */
     uint8_t flags;       /*!< List of flags */
 
@@ -182,7 +184,7 @@ lwpktr_t lwpkt_write(lwpkt_t* pkt,
                      const void* data, size_t len);
 lwpktr_t lwpkt_reset(lwpkt_t* pkt);
 lwpktr_t lwpkt_process(lwpkt_t* pkt, uint32_t time);
-lwpktr_t lwpkt_set_evt_fn(lwpkt_t* pkt, lwpkt_evt_fn evt_fn);
+lwpktr_t lwpkt_set_evt_fn(lwpkt_t* pkt, lwpkt_evt_fn evt_fn, void *usr_ptr);
 
 /* Functions available as conditional build */
 void lwpkt_set_addr_enabled(lwpkt_t* pkt, uint8_t enable);
